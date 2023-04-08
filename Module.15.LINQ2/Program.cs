@@ -8,19 +8,26 @@ namespace Module._15.LINQ2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Factorial(20));
-        }
-
-        static long Factorial(int number)
-        {
-            var numbers = new List<int>();
-            for (var i = 1; i < number; i++)
+            var contacts = new List<Contact>()
             {
-                numbers.Add(i);
-            }
+               new Contact() { Name = "Андрей", Phone = 79994500508 },
+               new Contact() { Name = "Сергей", Phone = 799990455 },
+               new Contact() { Name = "Иван", Phone = 79999675334 },
+               new Contact() { Name = "Игорь", Phone = 8884994 },
+               new Contact() { Name = "Анна", Phone = 665565656 },
+               new Contact() { Name = "Василий", Phone = 3434 }
+            };
 
-            long result = numbers.Aggregate((x, y) => x * y);
-            return result;
+            Console.WriteLine(contacts
+                .Where(c => c.Phone.ToString().StartsWith('7'))
+                .Where(c => c.Phone.ToString().Length == 11)
+                .Count());
         }
+    }
+
+    public class Contact
+    {
+        public string Name { get; set; }
+        public long Phone { get; set; }
     }
 }
