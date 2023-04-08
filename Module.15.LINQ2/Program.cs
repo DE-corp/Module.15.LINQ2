@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Module._15.LINQ2
 {
@@ -6,7 +7,14 @@ namespace Module._15.LINQ2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var firstWord = "Привет";
+            var secondWord = "мир";
+            var list = firstWord.Intersect(secondWord);
+
+            foreach (var c in list)
+                Console.WriteLine(c);
+
+
         }
     }
 }
