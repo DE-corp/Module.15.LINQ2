@@ -8,22 +8,19 @@ namespace Module._15.LINQ2
     {
         static void Main(string[] args)
         {
-            var punctuation = new List<char>() { ' ', ',', '.', ';', ':', '!', '?' };
+            Console.WriteLine(Factorial(20));
+        }
 
-            Console.Write("Введи строку: ");
-            var line = Console.ReadLine();
-
-            if (string.IsNullOrEmpty(line))
+        static long Factorial(int number)
+        {
+            var numbers = new List<int>();
+            for (var i = 1; i < number; i++)
             {
-                Console.WriteLine("Вы ввели пустой текст");
-                return;
+                numbers.Add(i);
             }
 
-            Console.WriteLine();
-            Console.WriteLine("Текст без знаков препинания: ");
-
-            var noPunctuation = line.Except(punctuation).ToArray();
-            Console.WriteLine(noPunctuation);
+            long result = numbers.Aggregate((x, y) => x * y);
+            return result;
         }
     }
 }
