@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Module._15.LINQ2
@@ -7,20 +8,22 @@ namespace Module._15.LINQ2
     {
         static void Main(string[] args)
         {
-            var softwareManufacturers = new List<string>()
+            var punctuation = new List<char>() { ' ', ',', '.', ';', ':', '!', '?' };
+
+            Console.Write("Введи строку: ");
+            var line = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(line))
             {
-               "Microsoft", "Apple", "Oracle"
-            };
+                Console.WriteLine("Вы ввели пустой текст");
+                return;
+            }
 
-            var hardwareManufacturers = new List<string>()
-            {
-               "Apple", "Samsung", "Intel"
-            };
+            Console.WriteLine();
+            Console.WriteLine("Текст без знаков препинания: ");
 
-            var itCompanies = softwareManufacturers.Union(hardwareManufacturers);
-            foreach (var c in itCompanies)
-                System.Console.WriteLine(c);
-
+            var noPunctuation = line.Except(punctuation).ToArray();
+            Console.WriteLine(noPunctuation);
         }
     }
 }
