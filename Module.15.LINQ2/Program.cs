@@ -8,29 +8,49 @@ namespace Module._15.LINQ2
     {
         static void Main(string[] args)
         {
-            var numbers = new List<int>();
-            while (true)
+            var phoneBook = new List<Contact>();
+
+            // добавляем контакты
+            phoneBook.Add(new Contact("Игорь", 79990000001, "igor@example.com"));
+            phoneBook.Add(new Contact("Сергей", 79990000010, "serge@example.com"));
+            phoneBook.Add(new Contact("Анатолий", 79990000011, "anatoly@example.com"));
+            phoneBook.Add(new Contact("Валерий", 79990000012, "valera@example.com"));
+            phoneBook.Add(new Contact("Сергей", 799900000013, "serg@gmail.com"));
+            phoneBook.Add(new Contact("Иннокентий", 799900000013, "innokentii@example.com"));
+
+            var sorted = phoneBook.GroupBy(c => c.Email.Split("@").Last());
+
+            foreach (var c in sorted)
             {
-                Console.Write("Введи число: ");
-                var isNumber = int.TryParse(Console.ReadLine(), out int number);
-
-                if (!isNumber)
+                if (c.Key.Contains("example"))
                 {
-                    Console.WriteLine("Нужно ввести число!");
-                    continue;
+                    Console.WriteLine("Фейковые адреса: ");
+
+                    foreach (var contact in c)
+                        Console.WriteLine(contact.Name + " " + contact.Email);
+
                 }
-
-                numbers.Add(number);
-
-                Console.WriteLine();
-
-                Console.WriteLine($"Количество чисел в списке: " + numbers.Count());
-                Console.WriteLine($"Сумма чисел в списке: " + numbers.Sum());
-                Console.WriteLine($"Наибольшее число: " + numbers.Max());
-                Console.WriteLine($"Наименьшее число: " + numbers.Min());
-                Console.WriteLine($"Cреднее значение: " + numbers.Average());
-
+                else
+                {
+                    Console.WriteLine("Реальные адреса: ");
+                    foreach (var contact in c)
+                        Console.WriteLine(contact.Name + " " + contact.Email);
+                }
             }
+        }
+    }
+
+    internal class Contact
+    {
+        public string Name;
+        public long Phone;
+        public string Email;
+
+        public Contact(string name, long phone, string email)
+        {
+            Name = name;
+            Phone = phone;
+            Email = email;
         }
     }
 }
