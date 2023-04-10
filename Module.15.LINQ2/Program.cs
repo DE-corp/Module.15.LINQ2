@@ -8,49 +8,58 @@ namespace Module._15.LINQ2
     {
         static void Main(string[] args)
         {
-            var phoneBook = new List<Contact>();
-
-            // добавляем контакты
-            phoneBook.Add(new Contact("Игорь", 79990000001, "igor@example.com"));
-            phoneBook.Add(new Contact("Сергей", 79990000010, "serge@example.com"));
-            phoneBook.Add(new Contact("Анатолий", 79990000011, "anatoly@example.com"));
-            phoneBook.Add(new Contact("Валерий", 79990000012, "valera@example.com"));
-            phoneBook.Add(new Contact("Сергей", 799900000013, "serg@gmail.com"));
-            phoneBook.Add(new Contact("Иннокентий", 799900000013, "innokentii@example.com"));
-
-            var sorted = phoneBook.GroupBy(c => c.Email.Split("@").Last());
-
-            foreach (var c in sorted)
+            var departments = new List<Department>()
             {
-                if (c.Key.Contains("example"))
-                {
-                    Console.WriteLine("Фейковые адреса: ");
+               new Department() {Id = 1, Name = "Программирование"},
+               new Department() {Id = 2, Name = "Продажи"}
+            };
 
-                    foreach (var contact in c)
-                        Console.WriteLine(contact.Name + " " + contact.Email);
+            var employees = new List<Employee>()
+            {
+               new Employee() { DepartmentId = 1, Name = "Инна", Id = 1},
+               new Employee() { DepartmentId = 1, Name = "Андрей", Id = 2},
+               new Employee() { DepartmentId = 2, Name = "Виктор ", Id = 3},
+               new Employee() { DepartmentId = 3, Name = "Альберт ", Id = 4},
+            };
 
-                }
-                else
+            var result = employees.Join(departments,
+                emp => emp.DepartmentId,
+                d => d.Id,
+                (emp, d) => new
                 {
-                    Console.WriteLine("Реальные адреса: ");
-                    foreach (var contact in c)
-                        Console.WriteLine(contact.Name + " " + contact.Email);
-                }
-            }
+                    Name = emp.Name,
+                    Id = emp.Id,
+                    DepName = d.Name
+                });
+
+            foreach (var item in result)
+                Console.WriteLine(item.Name + " " + item.DepName);
+
+            Console.WriteLine();
+
+            var employeeAndDep = from employee in employees
+                                 join dep in departments on employee.DepartmentId equals dep.Id //  соединяем коллекции по общему ключу
+                                 select new // выборка в новую сущность
+                                 {
+                                     EmployeeName = employee.Name,
+                                     DepartmentName = dep.Name
+                                 };
+
+            foreach (var item in employeeAndDep)
+                Console.WriteLine(item.EmployeeName + ", отдел: " + item.DepartmentName);
         }
     }
 
-    internal class Contact
+    internal class Employee
     {
-        public string Name;
-        public long Phone;
-        public string Email;
+        public int DepartmentId { get; set; }
+        public string Name { get; set; }
+        public int Id { get; set; }
+    }
 
-        public Contact(string name, long phone, string email)
-        {
-            Name = name;
-            Phone = phone;
-            Email = email;
-        }
+    internal class Department
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }
