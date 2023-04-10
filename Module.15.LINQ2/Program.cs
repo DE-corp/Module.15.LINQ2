@@ -9,44 +9,41 @@ namespace Module._15.LINQ2
         static void Main(string[] args)
         {
             var departments = new List<Department>()
-            {
+           {
                new Department() {Id = 1, Name = "Программирование"},
                new Department() {Id = 2, Name = "Продажи"}
-            };
+           };
 
             var employees = new List<Employee>()
-            {
+           {
                new Employee() { DepartmentId = 1, Name = "Инна", Id = 1},
                new Employee() { DepartmentId = 1, Name = "Андрей", Id = 2},
                new Employee() { DepartmentId = 2, Name = "Виктор ", Id = 3},
                new Employee() { DepartmentId = 3, Name = "Альберт ", Id = 4},
-            };
+           };
 
-            var result = employees.Join(departments,
-                emp => emp.DepartmentId,
-                d => d.Id,
-                (emp, d) => new
-                {
-                    Name = emp.Name,
-                    Id = emp.Id,
-                    DepName = d.Name
-                });
+            var depsWithEmployees = departments.GroupJoin(
+               employees, // первый набор данных
+               d => d.Id, // общее свойство второго набора
+               e => e.DepartmentId, // общее свойство первого набора
+               (d, emps) => new  // результат выборки
+               {
+                   Name = d.Name,
+                   Employees = emps.Select(e => e.Name)
+               });
 
-            foreach (var item in result)
-                Console.WriteLine(item.Name + " " + item.DepName);
+            // Пробегаемся по кажлому отделу
+            foreach (var dep in depsWithEmployees)
+            {
+                Console.WriteLine(dep.Name + ":");
 
-            Console.WriteLine();
+                // Выводим сотрудников
+                foreach (string emp in dep.Employees)
+                    Console.WriteLine(emp);
 
-            var employeeAndDep = from employee in employees
-                                 join dep in departments on employee.DepartmentId equals dep.Id //  соединяем коллекции по общему ключу
-                                 select new // выборка в новую сущность
-                                 {
-                                     EmployeeName = employee.Name,
-                                     DepartmentName = dep.Name
-                                 };
+                Console.WriteLine();
+            }
 
-            foreach (var item in employeeAndDep)
-                Console.WriteLine(item.EmployeeName + ", отдел: " + item.DepartmentName);
         }
     }
 
