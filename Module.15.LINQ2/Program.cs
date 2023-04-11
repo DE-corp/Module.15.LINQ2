@@ -8,11 +8,7 @@ namespace Module._15.LINQ2
     {
         static void Main(string[] args)
         {
-            var departments = new List<Department>()
-           {
-               new Department() {Id = 1, Name = "Программирование"},
-               new Department() {Id = 2, Name = "Продажи"}
-           };
+          
 
             var employees = new List<Employee>()
            {
@@ -21,28 +17,13 @@ namespace Module._15.LINQ2
                new Employee() { DepartmentId = 2, Name = "Виктор ", Id = 3},
                new Employee() { DepartmentId = 3, Name = "Альберт ", Id = 4},
            };
-
-            var depsWithEmployees = departments.GroupJoin(
-               employees, // первый набор данных
-               d => d.Id, // общее свойство второго набора
-               e => e.DepartmentId, // общее свойство первого набора
-               (d, emps) => new  // результат выборки
-               {
-                   Name = d.Name,
-                   Employees = emps.Select(e => e.Name)
-               });
-
-            // Пробегаемся по кажлому отделу
-            foreach (var dep in depsWithEmployees)
-            {
-                Console.WriteLine(dep.Name + ":");
-
-                // Выводим сотрудников
-                foreach (string emp in dep.Employees)
-                    Console.WriteLine(emp);
-
-                Console.WriteLine();
-            }
+            var employeeArray = employees.ToArray();
+            // Выводим значение до добавления элемента
+            Console.WriteLine(employeeArray.Count());
+            employees.Add(new Employee() { DepartmentId = 1, Name = "Дмитрий", Id = 5 });
+            // Выводим значение после добавления элемента
+            Console.WriteLine(employeeArray.Count());
+            // Они одинаковые, значит выполняется мгновенно
 
         }
     }
@@ -52,11 +33,5 @@ namespace Module._15.LINQ2
         public int DepartmentId { get; set; }
         public string Name { get; set; }
         public int Id { get; set; }
-    }
-
-    internal class Department
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
     }
 }
